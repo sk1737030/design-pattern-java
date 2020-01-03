@@ -1,3 +1,5 @@
+package case1.setp1;
+
 import java.util.Date;
 
 /*
@@ -29,12 +31,12 @@ public class UnderstandDI {
     }
 }
 
-// Member를 사용한다 --> Member 기능에 의존한다. 라는 의미
+// Member를 사용한다 --> case1.setp1.Member 기능에 의존한다. 라는 의미
 class Member {
     String name;
     String nickname;
 
     public Member() {}
-//    private Member() {} 강한 결합시에 에러 발생한다. 약한결합은 내가 만들건지 안만들건지 상관없지만 강한 결합시에는 발생..
+//    private case1.setp1.Member() {} 강한 결합시에 에러 발생한다. 약한결합은 내가 만들건지 안만들건지 상관없지만 강한 결합시에는 발생..
 
 }
