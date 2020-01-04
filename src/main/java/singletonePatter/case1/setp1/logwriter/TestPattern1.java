@@ -1,4 +1,4 @@
-package case1.setp1.logwriter;
+package singletonePatter.case1.setp1.logwriter;
 
 public class TestPattern1 {
     public static void main(String[] args) {

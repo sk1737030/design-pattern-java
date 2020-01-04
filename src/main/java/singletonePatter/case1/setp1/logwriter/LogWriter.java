@@ -1,4 +1,4 @@
-package case1.setp1.logwriter;
+package singletonePatter.case1.setp1.logwriter;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

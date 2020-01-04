@@ -1,4 +1,4 @@
-package case1.setp1.singleton;
+package singletonePatter.case1.setp1.singleton;
 
 public class Database1 {
     private String name;

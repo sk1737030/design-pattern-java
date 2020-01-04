@@ -1,9 +1,10 @@
-package case1.setp1.singleton;
+package singletonePatter.case1.setp1.singleton;
 
 /*************************************
- * static변수는 jvm이 먼저 생성 시키기 때문에 이것을 이용하여 syncronized를 안쓰고 싱글톤을 구현
+ * 현재 문제점
+ * for문이 빠르게돌면서 한번에 여러개를 만들기 때문에 new로 다처리해버려서 싱글톤 의미가 없어진다.
  *************************************/
-public class TestPattern4 {
+public class TestPattern2 {
 
 
     private static int nNum = 0;
@@ -12,8 +13,8 @@ public class TestPattern4 {
         Runnable task = () -> {
             try {
                 nNum++;
-                Database4 database4 = Database4.getInstance(nNum + "번째 Database");
-                System.out.println("this is the " + database4.getName() + "!!!");
+                Database2 database2 = Database2.getInstance(nNum + "번째 Database");
+                System.out.println("this is the " + database2.getName() + "!!!");
             } catch (Exception e) {}
         };
         for (int i = 0; i < 10; i++) {

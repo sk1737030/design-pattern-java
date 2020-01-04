@@ -1,4 +1,4 @@
-package case1.setp1;
+package singletonePatter.case1.setp1;
 
 import java.util.Date;
 

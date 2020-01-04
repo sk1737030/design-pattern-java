@@ -1,4 +1,4 @@
-package case1.setp1.singleton;
+package singletonePatter.case1.setp1.singleton;
 /***************
  * 3에서의 syncronized를 보안하기위해
  **************/

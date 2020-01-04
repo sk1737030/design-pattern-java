@@ -1,4 +1,4 @@
-package case1.setp1.singleton;
+package singletonePatter.case1.setp1.singleton;
 
 /*************************************
  * 싱글톤 패턴
