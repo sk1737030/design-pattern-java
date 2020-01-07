@@ -19,9 +19,6 @@ public class TestPattern {
 
         System.out.println(p1.getAddressOne());
 
-
         System.out.println(p1.getFirstName());
     }
-
-
 }
