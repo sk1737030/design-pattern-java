@@ -1,0 +1,347 @@
+Index: src/main/java/ObserverPattern/case1/step1/TestPattern.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case1/step1/TestPattern.java	(date 1578210772092)
++++ src/main/java/ObserverPattern/case1/step1/TestPattern.java	(date 1578210772092)
+@@ -0,0 +1,21 @@
++package ObserverPattern.case1.step1;
++
++public class TestPattern {
++
++    public static void main(String[] args) {
++
++        PlayController controller = new PlayController();
++        MyClassA myClassA = new MyClassA(controller);
++        MyClassB myClassB = new MyClassB(controller);
++
++        System.out.println("------모든 클래스일시정지---------");
++        controller.setFlag(false);
++
++        System.out.println();
++
++        System.out.println("------모든 클래스 다시 시작-------");
++        controller.setFlag(true);
++
++        System.out.println();
++    }
++}
+Index: src/main/java/BuilderPattern/case1/step2/TestPattern.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/BuilderPattern/case1/step2/TestPattern.java	(revision d511b4faf1db675051771212b23f5693f6099436)
++++ src/main/java/BuilderPattern/case1/step2/TestPattern.java	(date 1578272560757)
+@@ -19,9 +19,6 @@
+ 
+         System.out.println(p1.getAddressOne());
+ 
+-
+         System.out.println(p1.getFirstName());
+     }
+-
+-
+ }
+Index: src/main/java/ObserverPattern/case2/step1/MyClassB.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case2/step1/MyClassB.java	(date 1578272747934)
++++ src/main/java/ObserverPattern/case2/step1/MyClassB.java	(date 1578272747934)
+@@ -0,0 +1,32 @@
++package ObserverPattern.case2.step1;
++
++import java.util.Observable;
++import java.util.Observer;
++
++public class MyClassB implements Observer {
++
++    Observable observable; // 등록될 Observable
++    private boolean bPlay; // 실행 여부
++
++    public MyClassB(Observable observable) {
++        this.observable = observable;
++        this.observable.addObserver(this); // 옵저버에 현재 클래스 등록.
++    }
++
++    @Override
++    public void update(Observable o, Object arg) {
++        if (o instanceof PlayController) {
++            PlayController myControl = (PlayController) o;
++            this.bPlay = myControl.getFlag();
++            myActControl();
++        }
++    }
++
++    private void myActControl() {
++        if (bPlay) {
++            System.out.println("MyClasssB  : 동작을 시작합니다.");
++        } else {
++            System.out.println("MyClasssB  : 동작을 중지합니다.");
++        }
++    }
++}
+Index: src/main/java/ObserverPattern/case2/step1/PlayController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case2/step1/PlayController.java	(date 1578387228704)
++++ src/main/java/ObserverPattern/case2/step1/PlayController.java	(date 1578387228704)
+@@ -0,0 +1,45 @@
++package ObserverPattern.case2.step1;
++
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Observer;
++
++
++public class PlayController implements Publisher {
++    private List<Observer> observers = new ArrayList<>();
++    private boolean play; // 실행 여부
++
++    public PlayController() {
++    }
++
++    @Override
++    public void addObserver(Observer observer) {
++        observers.add(observer);
++    }
++
++    @Override
++    public void deleteObserver(Observer observer) {
++        int index = observers.indexOf(observer);
++        observers.remove(index);
++    }
++
++    @Override
++    public void notifyObservers() {
++        for (Observer observer : observers) {
++            observer.update(play);
++        }
++    }
++
++    // 실행 여부 플래그 값 반환
++    public boolean getFlag() {
++        return play;
++    }
++
++    // 데이터를 전달 받아 플래그 값을 변경하고,
++    // 새로운 데이터가 들어왔음을 알린다.
++    public void setFlag(boolean play) {
++        this.play = play;
++        notifyObservers(); // 내용이 변경되었음을 알림.
++    }
++
++}
+Index: src/main/java/ObserverPattern/case2/step1/MyClassA.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case2/step1/MyClassA.java	(date 1578387228592)
++++ src/main/java/ObserverPattern/case2/step1/MyClassA.java	(date 1578387228592)
+@@ -0,0 +1,33 @@
++package ObserverPattern.case2.step1;
++
++import java.util.Observable;
++
++
++public class MyClassA implements Obj {
++
++    Observable observable; // 등록될 Observable
++    private boolean bPlay; // 실행 여부
++
++    public MyClassA(Observable observable) {
++        this.observable = observable;
++        this.observable.addObserver(this); // 옵저버에 현재 클래스 등록.
++    }
++
++    @Override
++    public void update(Observable o, Object arg) {
++        if (o instanceof PlayController) {
++            PlayController myControl = (PlayController) o;
++            this.bPlay = myControl.getFlag();
++            myActControl();
++        }
++    }
++
++    private void myActControl() {
++        if (bPlay) {
++            System.out.println("MyClasssA  : 동작을 시작합니다.");
++        } else {
++            System.out.println("MyClasssA  : 동작을 중지합니다.");
++            observable.deleteObserver(this);
++        }
++    }
++}
+Index: src/main/java/ObserverPattern/case2/step1/Observer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case2/step1/Observer.java	(date 1578274395097)
++++ src/main/java/ObserverPattern/case2/step1/Observer.java	(date 1578274395097)
+@@ -0,0 +1,5 @@
++package ObserverPattern.case2.step1;
++
++public interface Observer {
++    public void update(boolean play);
++}
+Index: src/main/java/ObserverPattern/case1/step1/MyClassA.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case1/step1/MyClassA.java	(date 1578210943547)
++++ src/main/java/ObserverPattern/case1/step1/MyClassA.java	(date 1578210943547)
+@@ -0,0 +1,33 @@
++package ObserverPattern.case1.step1;
++
++import java.util.Observable;
++import java.util.Observer;
++
++public class MyClassA implements Observer {
++
++    Observable observable; // 등록될 Observable
++    private boolean bPlay; // 실행 여부
++
++    public MyClassA(Observable observable) {
++        this.observable = observable;
++        this.observable.addObserver(this); // 옵저버에 현재 클래스 등록.
++    }
++
++    @Override
++    public void update(Observable o, Object arg) {
++        if (o instanceof PlayController) {
++            PlayController myControl = (PlayController) o;
++            this.bPlay = myControl.getFlag();
++            myActControl();
++        }
++    }
++
++    private void myActControl() {
++        if (bPlay) {
++            System.out.println("MyClasssA  : 동작을 시작합니다.");
++        } else {
++            System.out.println("MyClasssA  : 동작을 중지합니다.");
++            observable.deleteObserver(this);
++        }
++    }
++}
+Index: src/main/java/ObserverPattern/case2/step1/Publisher.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case2/step1/Publisher.java	(date 1578274244672)
++++ src/main/java/ObserverPattern/case2/step1/Publisher.java	(date 1578274244672)
+@@ -0,0 +1,4 @@
++package ObserverPattern.case2.step1;
++
++public interface Publisher {
++}
+Index: src/main/java/ObserverPattern/case2/step1/TestPattern.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case2/step1/TestPattern.java	(date 1578272747942)
++++ src/main/java/ObserverPattern/case2/step1/TestPattern.java	(date 1578272747942)
+@@ -0,0 +1,21 @@
++package ObserverPattern.case2.step1;
++
++public class TestPattern {
++
++    public static void main(String[] args) {
++
++        PlayController controller = new PlayController();
++        MyClassA myClassA = new MyClassA(controller);
++        MyClassB myClassB = new MyClassB(controller);
++
++        System.out.println("------모든 클래스일시정지---------");
++        controller.setFlag(false);
++
++        System.out.println();
++
++        System.out.println("------모든 클래스 다시 시작-------");
++        controller.setFlag(true);
++
++        System.out.println();
++    }
++}
+Index: src/main/java/ObserverPattern/case1/step1/MyClassB.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case1/step1/MyClassB.java	(date 1578210849862)
++++ src/main/java/ObserverPattern/case1/step1/MyClassB.java	(date 1578210849862)
+@@ -0,0 +1,32 @@
++package ObserverPattern.case1.step1;
++
++import java.util.Observable;
++import java.util.Observer;
++
++public class MyClassB implements Observer {
++
++    Observable observable; // 등록될 Observable
++    private boolean bPlay; // 실행 여부
++
++    public MyClassB(Observable observable) {
++        this.observable = observable;
++        this.observable.addObserver(this); // 옵저버에 현재 클래스 등록.
++    }
++
++    @Override
++    public void update(Observable o, Object arg) {
++        if (o instanceof PlayController) {
++            PlayController myControl = (PlayController) o;
++            this.bPlay = myControl.getFlag();
++            myActControl();
++        }
++    }
++
++    private void myActControl() {
++        if (bPlay) {
++            System.out.println("MyClasssB  : 동작을 시작합니다.");
++        } else {
++            System.out.println("MyClasssB  : 동작을 중지합니다.");
++        }
++    }
++}
+Index: src/main/java/ObserverPattern/case1/step1/PlayController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ObserverPattern/case1/step1/PlayController.java	(date 1578387228708)
++++ src/main/java/ObserverPattern/case1/step1/PlayController.java	(date 1578387228708)
+@@ -0,0 +1,24 @@
++package ObserverPattern.case1.step1;
++
++import java.util.Observable;
++
++public class PlayController extends Observable {
++
++    private boolean bPlat; // 실행 여부
++
++    public PlayController() {
++    }
++
++    // 실행 여부 플래그 값 반환
++    public boolean getFlag() {
++        return bPlat;
++    }
++
++    // 데이터를 전달 받아 플래그 값을 변경하고,
++    // 새로운 데이터가 들어왔음을 알린다.
++    public void setFlag(boolean bPlay) {
++        this.bPlat = bPlay;
++        setChanged();
++        notifyObservers();
++    }
++}
