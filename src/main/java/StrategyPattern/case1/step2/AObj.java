@@ -1,0 +1,21 @@
+package StrategyPattern.case1.step2;
+
+public class AObj {
+
+    BInterface bInterface;
+
+    public AObj() {
+        bInterface = new BImplement();
+    }
+
+    public void someFunc() {
+        // 다음 기능을 수행합니다.
+        //System.out.println("AAA");
+        //System.out.println("AAA");
+
+        // 위의 기능이 필요합니다. B님 만들어 주세요.
+        // 기능 구현을 위함. Delegate DI..
+        bInterface.funcA();
+        bInterface.funcA();
+    }
+}
